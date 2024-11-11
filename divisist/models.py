@@ -101,13 +101,18 @@ class Estudiante(Persona):
 		return self.nombreCompleto
     
 class MatriculaMateria(models.Model):
-	periodoAcademico = models.CharField(max_length=100)
+	periodoAcademico = models.ForeignKey('periodoAcademico', on_delete=models.CASCADE)
 	estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
 	materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
 	def __str__(self):
 		return self.estudiante.nombreCompleto + self.materia.nombre
+	#Definir la matricula de una materia de un estudiante
 
-    #Definir la matricula de una materia de un estudiante
+class PeriodoAcademico(models.Model):
+	periodoAcademico = models.CharField(max_length=100)
+	def __str__(self):
+		return self.periodoAcademico
+	
 class NotaMateria(models.Model):
 	periodoAcademico = models.CharField(max_length=100)
 	estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
