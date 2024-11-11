@@ -20,6 +20,7 @@ router.register(r'matricula_materia', views.MatriculaMateriaViewSet)
 router.register(r'nota_materia', views.NotaMateriaViewSet)
 router.register(r'historico_notas', views.HistoricoNotasViewSet)
 router.register(r'usuario_carnet', views.UsuarioCarnetViewSet)
+router.register(r'app_user', views.UserAppViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

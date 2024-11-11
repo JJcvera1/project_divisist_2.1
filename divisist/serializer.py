@@ -1,6 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-from .models import Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, NotaMateria, HistoricoNotas, UsuarioCarnet
+from .models import (Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, 
+                    NotaMateria, HistoricoNotas, UsuarioCarnet, AppUser)
 from django.contrib.auth import get_user_model, authenticate
 
 UserModel = get_user_model()
@@ -83,6 +84,11 @@ class HistoricoNotasSerializer(serializers.ModelSerializer):
 class UsuarioCarnetSerializer(serializers.ModelSerializer):
     class Meta:
         model=UsuarioCarnet
+        fields='__all__'
+
+class UserAppSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=AppUser
         fields='__all__'
 
 class UserLoginSerializer(serializers.Serializer):

@@ -1,6 +1,9 @@
 from rest_framework import viewsets
-from .serializer import AsistenciaSerializer, CarreraSerializar, ChatSerializer, EstudianteSerializer, FacultadSerializer, DepartamentoSerializer, HistoricoNotasSerializer, HorarioSerializer, MateriaSerializer, MatriculaMateriaSerializer, NotaMateriaSerializer, PensumSerializer, PersonaSerializer, ProfesorSerializer, SemestreSerializer, UsuarioCarnetSerializer, UserLoginSerializer, UserSerializer
-from .models import Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, NotaMateria, HistoricoNotas, UsuarioCarnet
+from .serializer import (AsistenciaSerializer, CarreraSerializar, ChatSerializer, EstudianteSerializer, FacultadSerializer, DepartamentoSerializer, 
+                        HistoricoNotasSerializer, HorarioSerializer, MateriaSerializer, MatriculaMateriaSerializer, NotaMateriaSerializer, PensumSerializer,  
+                        PersonaSerializer, ProfesorSerializer, SemestreSerializer, UsuarioCarnetSerializer, UserLoginSerializer, UserAppSerializer)
+from .models import (Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, 
+                    NotaMateria, HistoricoNotas, UsuarioCarnet, AppUser)
 from django.contrib.auth import get_user_model, login, logout
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
@@ -75,8 +78,12 @@ class UsuarioCarnetViewSet(viewsets.ModelViewSet):
     queryset=UsuarioCarnet.objects.all()
     serializer_class=UsuarioCarnetSerializer
 
+class UserAppViewSet(viewsets.ModelViewSet):
+    queryset=AppUser.objects.all()
+    serializer_class=UserAppSerializer
+
 class UserLogin(APIView):
-    permission_classes = (permissions.AllowAny)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (SessionAuthentication, )
 
     def post(self, request):
