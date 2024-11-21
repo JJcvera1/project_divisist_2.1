@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, NotaMateria, HistoricoNotas, UsuarioCarnet
+from .models import (Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, 
+                    NotaMateria, HistoricoNotas, UsuarioCarnet, AppUser)
 
 # Register your models here.
 
@@ -19,3 +20,4 @@ admin.site.register(MatriculaMateria)
 admin.site.register(NotaMateria)
 admin.site.register(HistoricoNotas)
 admin.site.register(UsuarioCarnet)
+admin.site.register(AppUser)
