@@ -4,6 +4,9 @@ from .models import (Facultad, Departamento, Semestre, Pensum, Carrera, Horario,
                     NotaMateria, HistoricoNotas, UsuarioCarnet, AppUser)
 from django.contrib.auth import get_user_model, authenticate
 
+import logging
+logger = logging.getLogger(__name__)
+
 UserModel = get_user_model()
 
 class FacultadSerializer(serializers.ModelSerializer):
@@ -91,15 +94,18 @@ class UserAppSerializer(serializers.ModelSerializer):
         model=AppUser
         fields='__all__'
 
-class UserLoginSerializer(serializers.Serializer):
-	email = serializers.EmailField()
-	password = serializers.CharField()
-	##
-	def check_user(self, clean_data):
-		user = authenticate(username=clean_data['email'], password=clean_data['password'])
-		if not user:
-			raise ValidationError('user not found')
-		return user
+#class UserLoginSerializer(serializers.Serializer):
+#    email = serializers.EmailField()
+#    password = serializers.CharField()
+#	##
+#    logger.info({email})
+#    logger.info({password})
+#    def check_user(self, clean_data):
+#        user = authenticate(username=clean_data['email'], password=clean_data['password'])
+#        if not user:
+#            logger.error("Validación fallida. Usuario o contraseña incorrectos.")
+#            raise ValidationError('user not found')
+#        return user
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:

@@ -1,15 +1,19 @@
 from rest_framework import viewsets
 from .serializer import (AsistenciaSerializer, CarreraSerializar, ChatSerializer, EstudianteSerializer, FacultadSerializer, DepartamentoSerializer, 
                         HistoricoNotasSerializer, HorarioSerializer, MateriaSerializer, MatriculaMateriaSerializer, NotaMateriaSerializer, PensumSerializer,  
-                        PersonaSerializer, ProfesorSerializer, SemestreSerializer, UsuarioCarnetSerializer, UserLoginSerializer, UserAppSerializer)
+                        PersonaSerializer, ProfesorSerializer, SemestreSerializer, UsuarioCarnetSerializer, #UserLoginSerializer, 
+                        UserAppSerializer)
 from .models import (Facultad, Departamento, Semestre, Pensum, Carrera, Horario, Persona, Profesor, Estudiante, Materia, Asistencia, Chat, MatriculaMateria, 
                     NotaMateria, HistoricoNotas, UsuarioCarnet, AppUser)
 from django.contrib.auth import get_user_model, login, logout
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import permissions, status
-from .validations import custom_validation, validate_email, validate_password
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -82,32 +86,53 @@ class UserAppViewSet(viewsets.ModelViewSet):
     queryset=AppUser.objects.all()
     serializer_class=UserAppSerializer
 
-class UserLogin(APIView):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = (SessionAuthentication, )
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    print(request.data)
+    user = get_object_or_404(AppUser, email=request.data['email'])
 
-    def post(self, request):
-        data = request.data
-        assert validate_email(data)
-        assert validate_password(data)
-        serializer = UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.check_user(data)
-            login(request, user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+    if not user.check_password(request.data['password']):
+        return Response({"error": "Invalid password"}, status=status.HTTP_400_BAD_REQUEST)
 
-class UserLogout(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = ()
-	def post(self, request):
-		logout(request)
-		return Response(status=status.HTTP_200_OK)
+    token, created = Token.objects.get_or_create(user=user)
+    serializer = UserAppSerializer(instance=user)
+
+    return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def profile(request):
+    print(request.user)
+    return Response("You are login with {}".format(request.user.username), status=status.HTTP_200_OK)
+
+# class UserLogin(APIView):
+#     permission_classes = (permissions.AllowAny,)
+#     authentication_classes = (SessionAuthentication, )
+
+#     def post(self, request):
+#         data = request.data
+#         assert validate_email(data)
+#         assert validate_password(data)
+#         serializer = UserLoginSerializer(data=data)
+#         if serializer.is_valid(raise_exception=True):
+#             user = serializer.check_user(data)
+#             login(request, user)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+# class UserLogout(APIView):
+# 	permission_classes = (permissions.AllowAny,)
+# 	authentication_classes = ()
+# 	def post(self, request):
+# 		logout(request)
+# 		return Response(status=status.HTTP_200_OK)
 
 
-class UserView(APIView):
-	permission_classes = (permissions.IsAuthenticated,)
-	authentication_classes = (SessionAuthentication,)
-	##
-	def get(self, request):
-		serializer = UserSerializer(request.user)
-		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+# class UserView(APIView):
+# 	permission_classes = (permissions.IsAuthenticated,)
+# 	authentication_classes = (SessionAuthentication,)
+# 	##
+# 	def get(self, request):
+# 		serializer = UserSerializer(request.user)
+# 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)

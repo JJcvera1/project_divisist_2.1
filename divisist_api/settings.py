@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'corsheaders',
     "rest_framework",
+    "rest_framework.authtoken",
     "divisist",
 ]
 
@@ -163,3 +164,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+
+SESSION_COOKIE_SAMESITE = 'None'  
+SESSION_COOKIE_SECURE = True
