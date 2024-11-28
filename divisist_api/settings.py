@@ -169,3 +169,12 @@ CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
 SESSION_COOKIE_SAMESITE = 'None'  
 SESSION_COOKIE_SECURE = True
+
+#EMAILS
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'monicagg@ufps.edu.co'
+EMAIL_HOST_PASSWORD ='qqke icvz otgx yxrz'
+DEFAULT_FROM_EMAIL =  'monicagg@ufps.edu.co'
